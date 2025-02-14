@@ -57,4 +57,17 @@ public class Produto {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
+
+    /**
+     * Método para decrementar a quantidade do estoque.
+     *
+     * @param quantidade Compra que será realizada.
+     * @throws IllegalArgumentException Caso o estoque seja insuficiente.
+     */
+    public void decrementarEstoque(int quantidade) {
+        if (quantidade > this.quantidade) {
+            throw new IllegalArgumentException("Estoque insuficiente para o produto: " + nome);
+        }
+        this.quantidade -= quantidade;  // Reduz o estoque do produto
+    }
 }
