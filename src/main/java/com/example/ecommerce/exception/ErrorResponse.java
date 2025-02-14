@@ -1,27 +1,11 @@
 package com.example.ecommerce.exception;
 
-import java.time.LocalDateTime;
-
 public class ErrorResponse {
-    private String errorCode;
+
     private String message;
-    private String timestamp;
+    private int status;
 
-    public ErrorResponse(String errorCode, String message) {
-        this.errorCode = errorCode;
-        this.message = message;
-        this.timestamp = LocalDateTime.now().toString();
-    }
-
-    // Getters e Setters
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
+    // Getters e setters
     public String getMessage() {
         return message;
     }
@@ -30,11 +14,11 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public int getStatus() {
+        return status;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

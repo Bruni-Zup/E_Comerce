@@ -63,6 +63,19 @@
             <version>1.18.24</version> <!-- Versão do Lombok -->
             <scope>provided</scope>
         </dependency>
+
+        <!-- Spring Boot Starter Validation (para validações com @Valid) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Hibernate Validator (implementação do Bean Validation) -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.2.0.Final</version> <!-- Verifique por versões mais recentes -->
+        </dependency>
     </dependencies>
 
     <build>
@@ -93,5 +106,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

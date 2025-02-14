@@ -1,5 +1,7 @@
 package com.example.ecommerce.service;
 
+import com.example.ecommerce.exception.ClienteJaCadastradoException;
+import com.example.ecommerce.exception.ClienteNaoEncontradoException;
 import com.example.ecommerce.model.Cliente;
 import com.example.ecommerce.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +19,16 @@ public class ClienteService {
 
     public void cadastrarCliente(Cliente cliente) {
         if (clienteRepository.existsById(cliente.getCpf())) {
-            throw new IllegalArgumentException("CPF já cadastrado: " + cliente.getCpf());
+            throw new ClienteJaCadastradoException("CPF já cadastrado: " + cliente.getCpf());
         }
         if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
-            throw new IllegalArgumentException("Email já cadastrado: " + cliente.getEmail());
+            throw new ClienteJaCadastradoException("Email já cadastrado: " + cliente.getEmail());
         }
         clienteRepository.save(cliente);
     }
 
     public Cliente buscarClientePorCpf(String cpf) {
         return clienteRepository.findById(cpf)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado: " + cpf));
+                .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado: " + cpf));
     }
 }
