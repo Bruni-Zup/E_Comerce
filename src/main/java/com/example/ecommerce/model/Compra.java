@@ -1,34 +1,32 @@
 package com.example.ecommerce.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "compras")
 public class Compra {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_cpf")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @ManyToMany
-    @JoinTable(
-            name = "compras_produtos",
-            joinColumns = @JoinColumn(name = "compra_id"),
-            inverseJoinColumns = @JoinColumn(name = "produto_id")
-    )
-    private List<Produto> produtos;
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemCompra> itens = new ArrayList<>();
 
-    // Construtor padrão para o JPA
+    // Construtores
     public Compra() {}
 
-    public Compra(Cliente cliente, List<Produto> produtos) {
+    public Compra(Cliente cliente, List<ItemCompra> itens) {
+        if (cliente == null || itens == null || itens.isEmpty()) {
+            throw new IllegalArgumentException("A compra deve ter um cliente e ao menos um item.");
+        }
         this.cliente = cliente;
-        this.produtos = produtos;
+        this.itens = itens;
     }
 
     // Getters e Setters
@@ -36,19 +34,44 @@ public class Compra {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
 
     public void setCliente(Cliente cliente) {
+        if (cliente == null) {
+            throw new IllegalArgumentException("Cliente não pode ser nulo.");
+        }
         this.cliente = cliente;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
+    public List<ItemCompra> getItens() {
+        return itens;
     }
 
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
+    public void setItens(List<ItemCompra> itens) {
+        if (itens == null || itens.isEmpty()) {
+            throw new IllegalArgumentException("A compra deve ter ao menos um item.");
+        }
+        this.itens = itens;
+    }
+
+    // Método adicional para adicionar itens na compra
+    public void adicionarItem(ItemCompra itemCompra) {
+        if (itemCompra == null) {
+            throw new IllegalArgumentException("Item não pode ser nulo.");
+        }
+        itens.add(itemCompra);
+    }
+
+    // Método para calcular o total da compra
+    public Double calcularTotal() {
+        return itens.stream()
+                .mapToDouble(ItemCompra::calcularSubtotal)
+                .sum();
     }
 }
